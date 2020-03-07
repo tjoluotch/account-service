@@ -1,0 +1,20 @@
+{
+  "service": {
+    "name": "account",
+    "tags": ["bank"],
+    "port": 700,
+    "meta": {
+      "meta": "account service latest v0.0.1"
+    },
+    "check": {
+      "id": "api-account",
+      "name": "HTTP account api on port 700",
+      "http": "http://localhost:700/api/health",
+      "tls_skip_verify": false,
+      "method": "GET",
+      "body": "",
+      "interval": "15s",
+      "timeout": "5s"
+    }
+  }
+}
