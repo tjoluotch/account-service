@@ -1,9 +1,14 @@
 package main
 
-import "net/http"
+import (
+	"consul-service/internal/api"
+	"github.com/gorilla/mux"
+)
 
-func ServerMux() (*http.ServeMux, error) {
-	mux := http.NewServeMux()
-	mux.HandleFunc("/api/health", HealthHandler)
-	return mux, nil
+func ServerMux() (*mux.Router, error) {
+	router := mux.NewRouter()
+	router.HandleFunc("/api/health", api.HealthHandler)
+	router.HandleFunc("/api/payment", api.PaymentHandler)
+	router.Use(api.LoggingMiddleware)
+	return router, nil
 }

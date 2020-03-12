@@ -1,5 +1,7 @@
 # github.com/BurntSushi/toml v0.3.1
 github.com/BurntSushi/toml
+# github.com/gorilla/mux v1.7.4
+github.com/gorilla/mux
 # go.uber.org/atomic v1.5.0
 go.uber.org/atomic
 # go.uber.org/multierr v1.3.0

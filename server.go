@@ -1,16 +1,17 @@
 package main
 
 import (
-	"go.uber.org/zap"
+	"consul-service/internal/config"
 	"net/http"
 )
 
 var (
-	logger *zap.SugaredLogger
+	logger = config.Logger{}
 )
 
 func main() {
-	logger = setLogger()
+	logger = config.Logger{}
+	logger.Set()
 	logger.Infow("attempt setup server multiplexer")
 	mux, err := ServerMux()
 	if err != nil {

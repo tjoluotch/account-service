@@ -1,4 +1,4 @@
-package main
+package config
 
 import (
 	"go.uber.org/zap"
@@ -6,7 +6,12 @@ import (
 	"log"
 )
 
-func setLogger() *zap.SugaredLogger {
+type Logger struct {
+	*zap.SugaredLogger
+}
+
+// initialize server logger level encoder and configuration
+func (l *Logger) Set() *Logger {
 	config := zap.NewDevelopmentConfig()
 	config.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
 	logger, err := config.Build()
@@ -16,5 +21,6 @@ func setLogger() *zap.SugaredLogger {
 	}
 	logger.Info("logger initialised")
 	defer logger.Sync()
-	return logger.Sugar()
+	loggerType := Logger{logger.Sugar()}
+	return &loggerType
 }
