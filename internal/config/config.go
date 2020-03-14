@@ -3,24 +3,17 @@ package config
 import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
-	"log"
 )
 
-type Logger struct {
-	*zap.SugaredLogger
-}
-
-// initialize server logger level encoder and configuration
-func (l *Logger) Set() *Logger {
-	config := zap.NewDevelopmentConfig()
-	config.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
-	logger, err := config.Build()
+// initialize logger configuration for micro service
+func BuildLogger() (*zap.SugaredLogger, error) {
+	configLogger := zap.NewDevelopmentConfig()
+	configLogger.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
+	l, err := configLogger.Build(zap.AddCaller())
 	if err != nil {
-		log.Fatalf("failed to initialize logger: %v", err)
-		return nil
+		return nil, err
 	}
-	logger.Info("logger initialised")
-	defer logger.Sync()
-	loggerType := Logger{logger.Sugar()}
-	return &loggerType
+	logger := l.Sugar()
+	defer l.Sync()
+	return logger, nil
 }

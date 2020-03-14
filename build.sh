@@ -20,7 +20,7 @@ docker build \
 --compress \
 --rm \
 -t ${IMG}:0.0.1 .
-echo "docker image build for $(IMG) completed..."
+echo "docker image build for ${IMG} completed..."
 }
 
 if [[ $1 == "build" ]]; then

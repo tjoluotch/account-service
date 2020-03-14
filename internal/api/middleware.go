@@ -1,16 +1,17 @@
 package api
 
 import (
-	"go.uber.org/zap"
 	"net/http"
 )
 
-func LoggingMiddleware(handler http.Handler) http.Handler {
+const logMsg = "LOGGING MIDDLEWARE"
+
+func (service *Service) LoggingMiddleware(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(resp http.ResponseWriter, req *http.Request) {
-		logger := zap.L().Sugar()
-		logger.Infow("request URI", req.RequestURI)
-		logger.Infow("request method", req.Method)
-		logger.Infow("source", req.RemoteAddr)
+		logger := service.Logger
+		logger.Infow(logMsg, "request URI", req.RequestURI)
+		logger.Infow(logMsg, "request method", req.Method)
+		logger.Infow(logMsg, "IP", req.RemoteAddr)
 		handler.ServeHTTP(resp, req)
 	})
 }
