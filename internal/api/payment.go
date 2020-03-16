@@ -33,6 +33,7 @@ func (service *Service) PaymentHandler(resp http.ResponseWriter, req *http.Reque
 	logger.Info("successfully decoded payload to Payment struct")
 
 	//	generate payment id random 6 s.f. integer
+	logger.Info("attempting to generate id")
 	id, err := config.IdGenerator()
 	if err != nil {
 		logger.Errorw("error generating id",
@@ -41,7 +42,8 @@ func (service *Service) PaymentHandler(resp http.ResponseWriter, req *http.Reque
 		return
 
 	}
-	logger.Info("id ", id)
+	logger.Infow("ID generation successful",
+		"id ", id)
 
 	// comms with grpc
 }
