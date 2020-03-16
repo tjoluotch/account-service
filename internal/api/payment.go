@@ -1,11 +1,10 @@
 package api
 
 import (
+	"consul-service/internal/config"
 	"consul-service/internal/models"
-	"crypto/rand"
 	"encoding/json"
 	"io"
-	"math/big"
 	"net/http"
 )
 
@@ -34,19 +33,15 @@ func (service *Service) PaymentHandler(resp http.ResponseWriter, req *http.Reque
 	logger.Info("successfully decoded payload to Payment struct")
 
 	//	generate payment id random 6 s.f. integer
-	generator := rand.Reader
-	max := big.NewInt(1000000)
-	min := big.NewInt(100000)
-	diff := max.Sub(max, min)
-	res, err := rand.Int(generator, diff)
+	id, err := config.IdGenerator()
 	if err != nil {
 		logger.Errorw("error generating id",
 			"error", err)
 		resp.WriteHeader(http.StatusInternalServerError)
 		return
+
 	}
-	res = res.Add(res, min)
-	logger.Info("id ", res.String())
+	logger.Info("id ", id)
 
 	// comms with grpc
 }
