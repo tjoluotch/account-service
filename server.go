@@ -3,11 +3,27 @@ package main
 import (
 	"consul-service/internal/api"
 	"consul-service/internal/config"
+	"google.golang.org/grpc"
 	"log"
 	"net/http"
 )
 
-var ()
+var (
+	GRPC_STUB = "localhost:3000"
+	optsGrpc  []grpc.DialOption
+)
+
+func GrpcInit(address string, service *api.Service) *grpc.ClientConn {
+	// create grpc without tls transport security
+	optsGrpc = append(optsGrpc, grpc.WithInsecure())
+	optsGrpc = append(optsGrpc, grpc.WithBlock())
+	conn, err := grpc.Dial(address, optsGrpc...)
+	if err != nil {
+		service.Logger.Fatalw("failed to open grpc client connection",
+			"error", err)
+	}
+	return conn
+}
 
 func main() {
 	// logger init
