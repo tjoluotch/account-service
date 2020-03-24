@@ -3,14 +3,15 @@ package main
 import (
 	"consul-service/internal/api"
 	"consul-service/internal/config"
+	"consul-service/internal/pb"
 	"google.golang.org/grpc"
 	"log"
 	"net/http"
 )
 
 var (
-	GRPC_STUB = "localhost:3000"
-	optsGrpc  []grpc.DialOption
+	GRPC_SERVER = "localhost:3000"
+	optsGrpc    []grpc.DialOption
 )
 
 func GrpcInit(address string, service *api.Service) *grpc.ClientConn {
@@ -44,6 +45,14 @@ func main() {
 	logger.Infow("setup multiplexer",
 		"mux", mux)
 	logger.Info("starting server")
+
+	// grpc client provisioning
+	logger.Info("provisioning grpc client for connection to server", GRPC_SERVER)
+	conn := GrpcInit(GRPC_SERVER, service)
+	defer conn.Close()
+	logger.Info("making client connection")
+	client := pb.NewAccountRoutesClient(conn)
+
 	//server startup
 	logger.Fatal(http.ListenAndServe(":8080", mux))
 }
