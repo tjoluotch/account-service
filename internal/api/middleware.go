@@ -14,9 +14,9 @@ func (service *Service) LoggingMiddleware(handler http.Handler) http.Handler {
 		logger.Infow(logMsg, "request URI", req.RequestURI,
 			"request method", req.Method,
 			"IP", req.RemoteAddr)
-		method := req.Method
-		uri := req.RequestURI
-		ua := req.UserAgent()
+		method := req.Method + " "
+		uri := req.RequestURI + " "
+		ua := req.UserAgent() + " "
 		handler.ServeHTTP(resp, req)
 		completed := time.Since(start)
 		logger.Info(method, uri, ua, completed)
