@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package account_grpc;
+
+service AccountRoutes {
+//    SavePayment rpc responsible for processing payment with encrypted user data
+    rpc SavePayment(Payment) returns (Reference) {}
+}
+
+// Payment message defines the payment amount being received by sent by a client
+message Payment {
+//    all scalar types
+    int32 amount = 1;
+    bytes account_holder = 2;
+    string sender_bank = 3;
+    string payment_id = 4;
+    bytes account_receiver = 5;
+}
+
+// Reference message defines the receiver bank and whether the payment was processed
+message Reference {
+//    all scalar types
+    string receiver_bank = 1;
+    bool confirmed = 2;
+    bytes account_paid_to = 3;
+}
