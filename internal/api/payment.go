@@ -3,9 +3,15 @@ package api
 import (
 	"consul-service/internal/config"
 	"consul-service/internal/models"
+	"consul-service/internal/pb"
+	"context"
 	"encoding/json"
 	"io"
 	"net/http"
+)
+
+var (
+	errorJson = &ErrorResponse{Error: "grpc request failure"}
 )
 
 func (service *Service) PaymentHandler(resp http.ResponseWriter, req *http.Request) {
@@ -45,5 +51,23 @@ func (service *Service) PaymentHandler(resp http.ResponseWriter, req *http.Reque
 	logger.Infow("ID generation successful",
 		"id ", id)
 
-	// comms with grpc
+	// comms with grpc via client
+	client := *service.Client
+	logger.Info("encoding rpc model")
+	rpcModel := &pb.Payment{
+		Amount:     paymentModel.Amount,
+		SenderBank: paymentModel.SenderBank}
+
+	_, err = client.SavePayment(context.Background(), rpcModel)
+	if err != nil {
+		logger.Errorw("rpc request failed",
+			"error", err)
+		resp.WriteHeader(http.StatusUnprocessableEntity)
+		err = json.NewEncoder(resp).Encode(errorJson)
+		if err != nil {
+			logger.Error("json encoding error", err)
+		}
+		return
+	}
+	resp.WriteHeader(http.StatusOK)
 }

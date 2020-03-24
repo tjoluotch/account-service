@@ -35,6 +35,15 @@ func main() {
 	service := &api.Service{Logger: logger}
 	logger.Info("logger initialised")
 
+	// grpc client provisioning
+	logger.Info("provisioning grpc client for connection to server", GRPC_SERVER)
+	conn := GrpcInit(GRPC_SERVER, service)
+	defer conn.Close()
+	logger.Info("making client connection")
+	client := pb.NewAccountRoutesClient(conn)
+	logger.Info("added grpc client to service")
+	service.Client = &client
+
 	// mux init
 	logger.Info("attempt setup server multiplexer")
 	mux, err := ServerMux(service)
@@ -45,13 +54,6 @@ func main() {
 	logger.Infow("setup multiplexer",
 		"mux", mux)
 	logger.Info("starting server")
-
-	// grpc client provisioning
-	logger.Info("provisioning grpc client for connection to server", GRPC_SERVER)
-	conn := GrpcInit(GRPC_SERVER, service)
-	defer conn.Close()
-	logger.Info("making client connection")
-	client := pb.NewAccountRoutesClient(conn)
 
 	//server startup
 	logger.Fatal(http.ListenAndServe(":8080", mux))

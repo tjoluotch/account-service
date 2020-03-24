@@ -7,5 +7,9 @@ import (
 
 type Service struct {
 	Logger *zap.SugaredLogger
-	client *pb.AccountRoutesClient
+	Client *pb.AccountRoutesClient
+}
+
+type ErrorResponse struct {
+	Error string `json:"error"`
 }
