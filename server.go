@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	GrpcServer      = "127.0.0.1:3000"
+	GrpcServer      = "127.0.0.1:2000"
 	optsGrpc        []grpc.DialOption
 	rpcConnChannel  = make(chan *grpc.ClientConn, 1)
 	rpcErrorChannel = make(chan error, 1)

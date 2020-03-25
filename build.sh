@@ -9,6 +9,7 @@ docker run \
 --restart unless-stopped \
 -p 700:8080/tcp \
 -d \
+--env-file config.env \
 --name mct \
 account:0.0.1
 }
