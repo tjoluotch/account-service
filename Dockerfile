@@ -15,18 +15,14 @@ RUN adduser \
 --no-create-home \
 --uid "${UID}" \
 ${USER}
-#RUN groupadd -r dev && \
-#useradd -r -s /bin/false -g dev trevorjo sudo
+
 WORKDIR /service
 COPY . /service
 # change ownership of all /service content to created user
 RUN chown -R trevorjo /service
-#RUN echo "trevorjo ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/user && \
-#chmod 0440 /etc/sudoers.d/user
-# GOCACHE disable as get a permission denied error due to running as non root user
 RUN go mod download && \
 go mod verify && \
-CGO_ENABLED=0 GOOS=linux go build -o app -mod vendor -trimpath
+CGO_ENABLED=0 go build -o app -mod vendor -trimpath
 USER trevorjo
 
 FROM scratch AS run-env
