@@ -1,7 +1,6 @@
-package main
+package api
 
 import (
-	. "consul-service/internal/api"
 	"github.com/gorilla/mux"
 	"net/http"
 )

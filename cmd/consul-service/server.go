@@ -1,4 +1,4 @@
-package main
+package consul_service
 
 import (
 	"consul-service/internal/api"
@@ -81,7 +81,7 @@ func main() {
 
 	// mux router init
 	logger.Info("attempt setup server multiplexer")
-	mux, err := ServerMux(service)
+	mux, err := api.ServerMux(service)
 	if err != nil {
 		logger.Fatalw("Failed to setup multiplexer",
 			"mux", mux)
