@@ -53,7 +53,6 @@ func main() {
 		}
 		logger.Info("grpc server host", addr)
 		conn, err := GrpcInit(net.JoinHostPort(addr[0], grpcServerPort), service)
-		//conn, err := GrpcInit(grpcServerPort, service)
 		if err != nil {
 			logger.Error("in separate go routine, grpc init failed with error")
 			rpcErrorChannel <- err
