@@ -69,5 +69,4 @@ func (service *Service) PaymentHandler(resp http.ResponseWriter, req *http.Reque
 		}
 		return
 	}
-	resp.WriteHeader(http.StatusOK)
 }
